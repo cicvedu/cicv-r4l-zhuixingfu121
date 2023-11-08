@@ -162,5 +162,15 @@ config SAMPLE_RUST_SELFTESTS
 	  This option builds the self test cases for Rust.
 
 	  If unsure, say N.
+	  
+config SAMPLE_RUST_HELLOWOELD
+	tristate "Print Helloworld in Rust"
+	help
+	  This option builds the Rust Helloworld sample.
+
+	  To compile this as a module, choose M here:
+	  the module will be called rust_helloworld.
+
+	  If unsure, say N.
 
 endif # SAMPLES_RUST

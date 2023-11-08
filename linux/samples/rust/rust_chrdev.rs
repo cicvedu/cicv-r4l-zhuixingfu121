@@ -39,12 +39,32 @@ impl file::Operations for RustFile {
         )
     }
 
-    fn write(_this: &Self,_file: &file::File,_reader: &mut impl kernel::io_buffer::IoBufferReader,_offset:u64,) -> Result<usize> {
-        Err(EPERM)
+    fn write(this: &Self,_file: &file::File,reader: &mut impl kernel::io_buffer::IoBufferReader,_offset:u64,) -> Result<usize> {
+        //Err(EPERM)
+        let total_size  = reader.len();
+        let buf = &mut this.inner.lock();
+        //reader.read_slice(buf)?;
+        //Ok(total_size)
+        //let total_size = reader.len();
+
+        reader.read_slice(&mut buf[..total_size])?;
+    	Ok(total_size)
+        
     }
 
-    fn read(_this: &Self,_file: &file::File,_writer: &mut impl kernel::io_buffer::IoBufferWriter,_offset:u64,) -> Result<usize> {
-        Err(EPERM)
+    fn read(this: &Self,_file: &file::File,writer: &mut impl kernel::io_buffer::IoBufferWriter,offset:u64,) -> Result<usize> {
+        //Err(EPERM)
+        let buf = &mut *this.inner.lock();
+        //let buf: &mut [u8] = &mut *buf;
+        let offset = offset as usize;
+        if offset > GLOBALMEM_SIZE {
+        	return Ok(0);
+        }
+        writer.write_slice(&buf[offset..])?;
+        Ok(buf.len())
+        //let data_to_send = this.data[..cnt];
+        //let ret = writer.write_slice(data_to_send);
+        
     }
 }
 
