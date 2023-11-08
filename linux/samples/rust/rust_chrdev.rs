@@ -43,9 +43,6 @@ impl file::Operations for RustFile {
         //Err(EPERM)
         let total_size  = reader.len();
         let buf = &mut this.inner.lock();
-        //reader.read_slice(buf)?;
-        //Ok(total_size)
-        //let total_size = reader.len();
 
         reader.read_slice(&mut buf[..total_size])?;
     	Ok(total_size)
@@ -62,8 +59,7 @@ impl file::Operations for RustFile {
         }
         writer.write_slice(&buf[offset..])?;
         Ok(buf.len())
-        //let data_to_send = this.data[..cnt];
-        //let ret = writer.write_slice(data_to_send);
+       
         
     }
 }
